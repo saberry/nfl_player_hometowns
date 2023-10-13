@@ -58,7 +58,9 @@ geo_getter <- function(link, town) {
     lon = geo_result$lon[1]
   )
   
-  output$bbox <- list(geo_result$boundingbox[[1]])
+  if(length(geo_result$boundingbox) != 0) {
+    output$bbox <- list(geo_result$boundingbox[[1]])
+  } else output$bbox <- NA
   
   output$town <- town
   
