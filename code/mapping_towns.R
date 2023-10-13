@@ -58,3 +58,20 @@ leaflet(all_player_df) %>%
              color = ~position_cols(position_type), 
              label = ~paste0(player, " ", position)) %>% 
   addLegend(pal = position_cols, values = ~position_type)
+
+position_data <- aggregate(
+  cbind(lat, lon) ~ position_type, 
+  data = all_player_df, 
+  function(x) mean(x, na.rm = TRUE))
+
+leaflet(position_data) %>% 
+  setView(lng = -87, lat = 41, zoom = 4) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addCircles(lng = ~lon, lat = ~lat, 
+             color = ~position_cols(position_type), 
+             label = ~paste0(position_type)) %>% 
+  addLegend(pal = position_cols, values = ~position_type)
+
+aggregate(cbind(Weight, Arms, Hands, Age, Height_inches) ~ position, 
+          data = all_player_df, 
+          function(x) mean(x, na.rm = TRUE))
