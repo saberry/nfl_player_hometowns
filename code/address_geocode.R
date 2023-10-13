@@ -19,10 +19,38 @@ base_links <- glue::glue("https://geocode.maps.co/search?q={town_df$clean_town}"
 
 geo_getter <- function(link, town) {
   
-  Sys.sleep(runif(1, .5, 1))
+  Sys.sleep(runif(1, .6, 1))
   
-  geo_request <- GET(link)
+  geo_request <- GET(
+    link, 
+    add_headers(
+      "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0", 
+      "Host" = "geocode.maps.co"
+    )
+  )
   
+  if(geo_request$status_code == 429) {
+    print("waiting on 429")
+    Sys.sleep(1)
+    geo_request <- GET(
+      link, 
+      add_headers(
+        "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0", 
+        "Host" = "geocode.maps.co"
+      )
+    ) 
+  } else if(geo_request$status_code == 503) {
+    print("waiting on 503")
+    Sys.sleep(5)
+    geo_request <- GET(
+      link, 
+      add_headers(
+        "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0", 
+        "Host" = "geocode.maps.co"
+      )
+    ) 
+  }
+    
   geo_result <- fromJSON(content(geo_request, as = "text"))
   
   output <- data.frame(
@@ -44,3 +72,5 @@ town_geocodes <- mapply(
   SIMPLIFY = FALSE, 
   USE.NAMES = FALSE
 )
+
+save(town_geocodes, "./data/town_geocodes.RData")

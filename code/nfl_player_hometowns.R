@@ -178,5 +178,5 @@ all_player_df[, to_numeric_vars] <- lapply(to_numeric_vars, function(x) {
   as.numeric(all_player_df[, x])
   }
 )
-
+plan(sequential)
 save(all_player_df, file = "data/all_player_df.RData")
