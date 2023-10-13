@@ -137,7 +137,7 @@ colnames(player_info_output) <- c("info", "value", "position",
 # from the page, so let's pivot it back out:
 
 all_player_df <- tidyr::pivot_wider(
-  player_info_output, id_cols = c("player", "team"), 
+  player_info_output, id_cols = c("player", "team", "position"), 
   names_from = info, 
   values_from = value
 )
