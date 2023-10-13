@@ -143,7 +143,7 @@ all_player_df <- tidyr::pivot_wider(
 )
 
 all_player_df$feet <- (as.numeric(str_extract(all_player_df$Height, "[56](?=-)")) * 12)
-all_player_df$inches <- as.numeric(str_extract(all_player_df$Height, "(?<=-)[56]"))
+all_player_df$inches <- as.numeric(str_extract(all_player_df$Height, "(?<=-)[0-9]"))
 all_player_df$inches[is.na(all_player_df$inches)] <- 0
 
 all_player_df$Height_inches <- all_player_df$feet + all_player_df$inches
